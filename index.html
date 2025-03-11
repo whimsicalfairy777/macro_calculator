@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macro Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .ingredient, .result { margin-bottom: 15px; }
+        input, button { padding: 8px; margin-right: 5px; }
+        .result { background-color: #f0f0f0; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Macro Calculator</h2>
+        <div id="ingredients"></div>
+        <button onclick="addIngredient()">Add Ingredient</button>
+        <div>
+            <label for="portions">Number of Portions:</label>
+            <input type="number" id="portions" value="1" min="1">
+        </div>
+        <button onclick="calculateMacros()">Calculate Macros</button>
+        <div id="results" class="result"></div>
+    </div>
+
+    <script>
+        function addIngredient() {
+            const container = document.getElementById('ingredients');
+            const div = document.createElement('div');
+            div.classList.add('ingredient');
+            div.innerHTML = `
+                <input type="text" placeholder="Ingredient Name">
+                <input type="number" placeholder="Carbs (g)">
+                <input type="number" placeholder="Fiber (g)">
+                <input type="number" placeholder="Fat (g)">
+                <input type="number" placeholder="Protein (g)">
+            `;
+            container.appendChild(div);
+        }
+
+        function calculateMacros() {
+            const ingredients = document.querySelectorAll('.ingredient');
+            let total = { carbs: 0, fiber: 0, fat: 0, protein: 0 };
+
+            ingredients.forEach(ingredient => {
+                const inputs = ingredient.querySelectorAll('input');
+                total.carbs += parseFloat(inputs[1].value) || 0;
+                total.fiber += parseFloat(inputs[2].value) || 0;
+                total.fat += parseFloat(inputs[3].value) || 0;
+                total.protein += parseFloat(inputs[4].value) || 0;
+            });
+
+            const portions = parseInt(document.getElementById('portions').value) || 1;
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <strong>Total Macros:</strong><br>
+                Carbs: ${total.carbs}g, Fiber: ${total.fiber}g, Fat: ${total.fat}g, Protein: ${total.protein}g<br>
+                <strong>Per Portion:</strong><br>
+                Carbs: ${(total.carbs / portions).toFixed(2)}g, Fiber: ${(total.fiber / portions).toFixed(2)}g, Fat: ${(total.fat / portions).toFixed(2)}g, Protein: ${(total.protein / portions).toFixed(2)}g
+            `;
+        }
+    </script>
+</body>
+</html>
